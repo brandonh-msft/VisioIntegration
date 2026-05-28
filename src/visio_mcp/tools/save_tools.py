@@ -14,6 +14,12 @@ from visio_mcp.visio_engine import VisioEngine
 
 logger = logging.getLogger(__name__)
 
+
+def _drawio_only_runtime_enabled() -> bool:
+    """Return True when the runtime should only emit draw.io output."""
+    value = os.getenv("VISIO_MCP_FORCE_DRAWIO", "")
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
 # ═══════════════════════════════════════════════════════════════════
 # TOOL: save_diagram
 # ═══════════════════════════════════════════════════════════════════
@@ -51,9 +57,15 @@ def save_diagram(
     Returns:
         Save status, output path, and rendering method used.
     """
-    fmt = format.lower().strip()
+    requested_format = format.lower().strip()
+    fmt = requested_format
     if fmt not in ("vsdx", "drawio"):
         return {"status": "error", "message": f"Unsupported format '{format}'. Use 'vsdx' or 'drawio'."}
+
+    drawio_only_runtime = _drawio_only_runtime_enabled()
+    if drawio_only_runtime and fmt == "vsdx":
+        logger.info("Forcing draw.io output because VISIO_MCP_FORCE_DRAWIO is enabled")
+        fmt = "drawio"
 
     # Resolve relative paths to a well-known output directory
     _output_dir = Path(__file__).resolve().parent.parent.parent.parent / "output"
@@ -144,6 +156,13 @@ def save_diagram(
         "resource_count": len(_diagram.state.resources),
         "connection_count": len(_diagram.state.connections),
         "boundary_count": len(_diagram.state.boundaries),
+        **(
+            {
+                "requested_format": requested_format,
+                "message": "This runtime only supports draw.io output; saved as .drawio.",
+            }
+            if drawio_only_runtime and requested_format != fmt
+            else {}
+        ),
     }
-
 

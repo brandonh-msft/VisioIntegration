@@ -769,7 +769,7 @@ class VisioEngine:
         except ImportError:
             raise RuntimeError(
                 "Neither Microsoft Visio (COM) nor python-vsdx is available. "
-                "Install python-vsdx (`pip install python-vsdx`) or use a machine with Visio installed."
+                "Install vsdx (`pip install vsdx`) or use a machine with Visio installed."
             )
 
         with vsdx.VisioFile() as vis:
