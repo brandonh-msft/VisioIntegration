@@ -281,6 +281,7 @@ Add to your `.vscode/mcp.json`:
 ```
 
 Use a version tag for stable setups; `:latest` is fine for local experimentation.
+The published container is **draw.io-only**; ask the MCP server to save `.drawio` files.
 
 ### Option C: CLI
 
@@ -305,8 +306,7 @@ visio-app
 ### Docker image notes
 
 - The container targets **portable MCP usage** and persists generated files by mounting `/app/output`.
-- `.drawio` output works in the image on any platform.
-- `.vsdx` output falls back to `vsdx`; full Visio COM automation remains Windows-only.
+- The image only writes `.drawio` output and will not attempt `.vsdx` rendering.
 - `import_pricing_estimate` works in the image because Chromium is installed during the image build.
 
 ---
