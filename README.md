@@ -304,7 +304,7 @@ visio-app
 
 - The container targets **portable MCP usage** and persists generated files by mounting `/app/output`.
 - `.drawio` output works in the image on any platform.
-- `.vsdx` output falls back to `python-vsdx`; full Visio COM automation remains Windows-only.
+- `.vsdx` output falls back to `vsdx`; full Visio COM automation remains Windows-only.
 - `import_pricing_estimate` works in the image because Chromium is installed during the image build.
 
 ---
