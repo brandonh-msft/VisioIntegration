@@ -266,16 +266,31 @@ Add to your `.vscode/mcp.json`:
 {
   "servers": {
     "visio-azure": {
-      "command": "python",
-      "args": ["-m", "visio_mcp.server"],
-      "cwd": "${workspaceFolder}",
-      "env": { "PYTHONPATH": "src" }
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-v",
+        "${workspaceFolder}/output:/app/output",
+        "ghcr.io/brandonh-msft/visiointegration-mcp:latest"
+      ]
     }
   }
 }
 ```
 
 ### Option C: CLI
+
+```bash
+# Build the image locally
+docker build -t visiointegration-mcp .
+
+# Run the MCP server directly over stdio
+docker run -i --rm -v "$(pwd)/output:/app/output" visiointegration-mcp
+```
+
+### Option D: Python CLI
 
 ```powershell
 # Run the MCP server directly (stdio)
@@ -284,6 +299,13 @@ visio-mcp
 # Or launch the full Streamlit app
 visio-app
 ```
+
+### Docker image notes
+
+- The container targets **portable MCP usage** and persists generated files by mounting `/app/output`.
+- `.drawio` output works in the image on any platform.
+- `.vsdx` output falls back to `python-vsdx`; full Visio COM automation remains Windows-only.
+- `import_pricing_estimate` works in the image because Chromium is installed during the image build.
 
 ---
 
