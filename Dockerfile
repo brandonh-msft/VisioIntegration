@@ -11,7 +11,7 @@ COPY src /app/src
 
 RUN pip install --upgrade pip \
     && pip install -e ".[vsdx]" \
-    # Keep Chromium in the image so import_pricing_estimate works in-container.
-    && python -m playwright install chromium
+    # Keep Chromium and its Linux dependencies in the image so import_pricing_estimate works in-container.
+    && python -m playwright install --with-deps chromium
 
 ENTRYPOINT ["python", "-m", "visio_mcp.server"]

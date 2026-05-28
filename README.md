@@ -273,12 +273,14 @@ Add to your `.vscode/mcp.json`:
         "--rm",
         "-v",
         "${workspaceFolder}/output:/app/output",
-        "ghcr.io/brandonh-msft/visiointegration-mcp:latest"
+        "ghcr.io/brandonh-msft/visiointegration-mcp:v0.2.0"
       ]
     }
   }
 }
 ```
+
+Use a version tag for stable setups; `:latest` is fine for local experimentation.
 
 ### Option C: CLI
 
